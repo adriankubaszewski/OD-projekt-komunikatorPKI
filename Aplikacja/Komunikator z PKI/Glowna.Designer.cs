@@ -1,6 +1,6 @@
 ﻿namespace Komunikator_z_PKI
 {
-    partial class Form2
+    partial class Glowna
     {
         /// <summary>
         /// Required designer variable.

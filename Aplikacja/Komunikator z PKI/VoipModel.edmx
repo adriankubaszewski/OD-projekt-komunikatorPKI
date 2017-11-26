@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VoipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Historia">
+          <Key>
+            <PropertyRef Name="id_rozmowy" />
+          </Key>
+          <Property Name="id_rozmowy" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_dzwoniacego" Type="int" Nullable="false" />
+          <Property Name="id_odbierajacego" Type="int" Nullable="false" />
+          <Property Name="czas_rozpoczecia" Type="datetime" Nullable="false" />
+          <Property Name="czas_zakonczenia" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lista_znajomych">
+          <Key>
+            <PropertyRef Name="id_znajomosci" />
+          </Key>
+          <Property Name="id_znajomosci" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_uzytkownika" Type="int" Nullable="false" />
+          <Property Name="id_znajomego" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Uzytkownicy">
+          <Key>
+            <PropertyRef Name="id_uzytkownika" />
+          </Key>
+          <Property Name="id_uzytkownika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nazwisko" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="haslo" Type="char" MaxLength="64" Nullable="false" />
+          <Property Name="klucz_publiczny" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Historia_Uzytkownicy">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Historia" Type="Self.Historia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Historia">
+              <PropertyRef Name="id_dzwoniacego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historia_Uzytkownicy1">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Historia" Type="Self.Historia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Historia">
+              <PropertyRef Name="id_odbierajacego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lista_znajomych_Uzytkownicy">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Lista_znajomych" Type="Self.Lista_znajomych" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Lista_znajomych">
+              <PropertyRef Name="id_uzytkownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lista_znajomych_Uzytkownicy1">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Lista_znajomych" Type="Self.Lista_znajomych" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Lista_znajomych">
+              <PropertyRef Name="id_znajomego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VoipModelStoreContainer">
+          <EntitySet Name="Historia" EntityType="Self.Historia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lista_znajomych" EntityType="Self.Lista_znajomych" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Uzytkownicy" EntityType="Self.Uzytkownicy" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Historia_Uzytkownicy" Association="Self.FK_Historia_Uzytkownicy">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Historia" EntitySet="Historia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historia_Uzytkownicy1" Association="Self.FK_Historia_Uzytkownicy1">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Historia" EntitySet="Historia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lista_znajomych_Uzytkownicy" Association="Self.FK_Lista_znajomych_Uzytkownicy">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Lista_znajomych" EntitySet="Lista_znajomych" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lista_znajomych_Uzytkownicy1" Association="Self.FK_Lista_znajomych_Uzytkownicy1">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Lista_znajomych" EntitySet="Lista_znajomych" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VoipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Historia">
+          <Key>
+            <PropertyRef Name="id_rozmowy" />
+          </Key>
+          <Property Name="id_rozmowy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_dzwoniacego" Type="Int32" Nullable="false" />
+          <Property Name="id_odbierajacego" Type="Int32" Nullable="false" />
+          <Property Name="czas_rozpoczecia" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="czas_zakonczenia" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Uzytkownicy" Relationship="Self.FK_Historia_Uzytkownicy" FromRole="Historia" ToRole="Uzytkownicy" />
+          <NavigationProperty Name="Uzytkownicy1" Relationship="Self.FK_Historia_Uzytkownicy1" FromRole="Historia" ToRole="Uzytkownicy" />
+        </EntityType>
+        <EntityType Name="Lista_znajomych">
+          <Key>
+            <PropertyRef Name="id_znajomosci" />
+          </Key>
+          <Property Name="id_znajomosci" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_uzytkownika" Type="Int32" Nullable="false" />
+          <Property Name="id_znajomego" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Uzytkownicy" Relationship="Self.FK_Lista_znajomych_Uzytkownicy" FromRole="Lista_znajomych" ToRole="Uzytkownicy" />
+          <NavigationProperty Name="Uzytkownicy1" Relationship="Self.FK_Lista_znajomych_Uzytkownicy1" FromRole="Lista_znajomych" ToRole="Uzytkownicy" />
+        </EntityType>
+        <EntityType Name="Uzytkownicy">
+          <Key>
+            <PropertyRef Name="id_uzytkownika" />
+          </Key>
+          <Property Name="id_uzytkownika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nazwisko" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="haslo" Type="String" MaxLength="64" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="klucz_publiczny" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Historia" Relationship="Self.FK_Historia_Uzytkownicy" FromRole="Uzytkownicy" ToRole="Historia" />
+          <NavigationProperty Name="Historia1" Relationship="Self.FK_Historia_Uzytkownicy1" FromRole="Uzytkownicy" ToRole="Historia" />
+          <NavigationProperty Name="Lista_znajomych" Relationship="Self.FK_Lista_znajomych_Uzytkownicy" FromRole="Uzytkownicy" ToRole="Lista_znajomych" />
+          <NavigationProperty Name="Lista_znajomych1" Relationship="Self.FK_Lista_znajomych_Uzytkownicy1" FromRole="Uzytkownicy" ToRole="Lista_znajomych" />
+        </EntityType>
+        <Association Name="FK_Historia_Uzytkownicy">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Historia" Type="Self.Historia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Historia">
+              <PropertyRef Name="id_dzwoniacego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historia_Uzytkownicy1">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Historia" Type="Self.Historia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Historia">
+              <PropertyRef Name="id_odbierajacego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lista_znajomych_Uzytkownicy">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Lista_znajomych" Type="Self.Lista_znajomych" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Lista_znajomych">
+              <PropertyRef Name="id_uzytkownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lista_znajomych_Uzytkownicy1">
+          <End Role="Uzytkownicy" Type="Self.Uzytkownicy" Multiplicity="1" />
+          <End Role="Lista_znajomych" Type="Self.Lista_znajomych" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uzytkownicy">
+              <PropertyRef Name="id_uzytkownika" />
+            </Principal>
+            <Dependent Role="Lista_znajomych">
+              <PropertyRef Name="id_znajomego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VoipEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Historia" EntityType="Self.Historia" />
+          <EntitySet Name="Lista_znajomych" EntityType="Self.Lista_znajomych" />
+          <EntitySet Name="Uzytkownicy" EntityType="Self.Uzytkownicy" />
+          <AssociationSet Name="FK_Historia_Uzytkownicy" Association="Self.FK_Historia_Uzytkownicy">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Historia" EntitySet="Historia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historia_Uzytkownicy1" Association="Self.FK_Historia_Uzytkownicy1">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Historia" EntitySet="Historia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lista_znajomych_Uzytkownicy" Association="Self.FK_Lista_znajomych_Uzytkownicy">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Lista_znajomych" EntitySet="Lista_znajomych" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lista_znajomych_Uzytkownicy1" Association="Self.FK_Lista_znajomych_Uzytkownicy1">
+            <End Role="Uzytkownicy" EntitySet="Uzytkownicy" />
+            <End Role="Lista_znajomych" EntitySet="Lista_znajomych" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VoipModelStoreContainer" CdmEntityContainer="VoipEntities">
+          <EntitySetMapping Name="Historia">
+            <EntityTypeMapping TypeName="VoipModel.Historia">
+              <MappingFragment StoreEntitySet="Historia">
+                <ScalarProperty Name="id_rozmowy" ColumnName="id_rozmowy" />
+                <ScalarProperty Name="id_dzwoniacego" ColumnName="id_dzwoniacego" />
+                <ScalarProperty Name="id_odbierajacego" ColumnName="id_odbierajacego" />
+                <ScalarProperty Name="czas_rozpoczecia" ColumnName="czas_rozpoczecia" />
+                <ScalarProperty Name="czas_zakonczenia" ColumnName="czas_zakonczenia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lista_znajomych">
+            <EntityTypeMapping TypeName="VoipModel.Lista_znajomych">
+              <MappingFragment StoreEntitySet="Lista_znajomych">
+                <ScalarProperty Name="id_znajomosci" ColumnName="id_znajomosci" />
+                <ScalarProperty Name="id_uzytkownika" ColumnName="id_uzytkownika" />
+                <ScalarProperty Name="id_znajomego" ColumnName="id_znajomego" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Uzytkownicy">
+            <EntityTypeMapping TypeName="VoipModel.Uzytkownicy">
+              <MappingFragment StoreEntitySet="Uzytkownicy">
+                <ScalarProperty Name="id_uzytkownika" ColumnName="id_uzytkownika" />
+                <ScalarProperty Name="imie" ColumnName="imie" />
+                <ScalarProperty Name="nazwisko" ColumnName="nazwisko" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="haslo" ColumnName="haslo" />
+                <ScalarProperty Name="klucz_publiczny" ColumnName="klucz_publiczny" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -13,16 +13,19 @@ using System.Net.Sockets;
 
 namespace Komunikator_z_PKI
 {
-    public partial class Form2 : Form
+    public partial class Glowna : Form
     {
+     
+
         Socket sockets;
         EndPoint ipLokalne, ipZnajomego;
 
         byte[] buffer;
 
-        public Form2(string login)
+        public Glowna(string login)
         {
             InitializeComponent();
+            this.Text = "Komunikator PKI";
             label2.Text = login;
 
             sockets = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
