@@ -50,11 +50,10 @@ namespace Komunikator_z_PKI
             return "127.0.0.1";
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
             // konwertowanie na ascii
-            System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
+            System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
             byte[] msg = new byte[1500];
             msg = enc.GetBytes(textBox2.Text);
 
@@ -94,7 +93,7 @@ namespace Komunikator_z_PKI
                     // pobieranie danych
                     bufor = (byte[])asyRes.AsyncState;
 
-                    System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
+                    System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
                     string msg = enc.GetString(bufor);
 
                     listBox1.Items.Add("Znajomy: " + msg);
