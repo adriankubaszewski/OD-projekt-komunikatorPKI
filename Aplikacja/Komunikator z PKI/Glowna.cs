@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 using System.Net;
 using System.Net.Sockets;
@@ -52,10 +53,13 @@ namespace Komunikator_z_PKI
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // szyfrowanie
+            string zaszyfrowany = DoZaszyfrowania(textBox2.Text);
+
             // konwertowanie na ascii
             System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
             byte[] msg = new byte[1500];
-            msg = enc.GetBytes(textBox2.Text);
+            msg = enc.GetBytes(zaszyfrowany);
 
             // wysylanie wiadomosci
             sockets.Send(msg);
@@ -95,8 +99,12 @@ namespace Komunikator_z_PKI
 
                     System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
                     string msg = enc.GetString(bufor);
+                    label8.Text = msg;
 
-                    listBox1.Items.Add("Znajomy: " + msg);
+                    ///// odszyfrowanie
+                    string rozszyfrowany = DoRozszyfrowania(label8.Text);
+
+                    listBox1.Items.Add("Znajomy: " + rozszyfrowany);
                 }
 
                 // ponowne nasluchiwanie
@@ -107,6 +115,61 @@ namespace Komunikator_z_PKI
             {
                 MessageBox.Show(exp.ToString());
             }
+        }
+
+        //////////////////////////////////////////////
+        //// SZYFROWANIE
+        //////////////////////////////////////////////
+
+        private static string IV = "hdfehf739f82sie3";  // musi mie 16 charów 
+        private static string Key = "sjgutkgirpfjenitvjeig94i3mkfm39g";   // musi mieć 32 czary
+
+        public static string DoZaszyfrowania(string podany)
+        {
+            return Zaszyfruj(podany);
+        }
+        public static string DoRozszyfrowania(string podany)
+        {
+            return Rozszyfruj(podany);
+        }
+
+        private static string Zaszyfruj(string dozaszyfrowania)
+        {
+            byte[] textbytes = ASCIIEncoding.ASCII.GetBytes(dozaszyfrowania);
+            AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
+            aes.BlockSize = 128;
+            aes.KeySize = 256;
+            aes.Key = ASCIIEncoding.ASCII.GetBytes(Key);
+            aes.IV = ASCIIEncoding.ASCII.GetBytes(IV);
+            aes.Padding = PaddingMode.PKCS7;
+            aes.Mode = CipherMode.CBC;
+
+            ICryptoTransform icrypt = aes.CreateEncryptor(aes.Key, aes.IV);
+
+            byte[] dane = icrypt.TransformFinalBlock(textbytes, 0, textbytes.Length);
+            icrypt.Dispose();
+
+            return Convert.ToBase64String(dane);
+        }
+
+        private static string Rozszyfruj(string dorozszyfrowania)
+        {
+
+            byte[] encbytes = Convert.FromBase64String(dorozszyfrowania);
+            AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
+            aes.BlockSize = 128;
+            aes.KeySize = 256;
+            aes.Key = ASCIIEncoding.ASCII.GetBytes(Key);
+            aes.IV = ASCIIEncoding.ASCII.GetBytes(IV);
+            aes.Padding = PaddingMode.PKCS7;
+            aes.Mode = CipherMode.CBC;
+
+            ICryptoTransform icrypt = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            byte[] dane = icrypt.TransformFinalBlock(encbytes, 0, encbytes.Length);
+            icrypt.Dispose();
+
+            return ASCIIEncoding.ASCII.GetString(dane);
         }
 
         
